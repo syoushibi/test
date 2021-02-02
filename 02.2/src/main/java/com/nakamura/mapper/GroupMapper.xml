@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 和绑定的接口全类名对应 -->
+<mapper namespace="com.nakamura.mapper.GroupMapper">	
+	<resultMap type="com.nakamura.bean.TbItemParamKey" id="key_group">
+		<id column="paramId" property="id"></id>
+		<result column="paramName" property="paramName"/>
+		<association property="paramGroup" javaType="com.nakamura.bean.TbItemParamGroup">
+			<id column="id" property="id"></id>
+			<result column="groupName" property="groupName"/>	
+			<result column="itemCatId" property="itemCatId"/>
+		</association>
+	</resultMap>
+	<select id="findParamKeyById" resultMap="key_group">
+	SELECT
+		a.id,
+		a.groupName,
+		a.itemCatId,
+		b.id paramId,
+		b.paramName
+		FROM
+		tbitemparamgroup a
+		INNER JOIN tbitemparamkey b ON a.id = b.groupId
+		WHERE
+		b.id = #{id}
+	</select>
+
+	<!--  
+	<resultMap type="com.nakamura.bean.TbItemParamGroup" id="group_key">
+		<id column="id" property="id"/>
+		<result column="groupName" property="groupName"/>
+		<result column="itemCatId" property="itemCatId"/>
+		<collection property="keys" ofType="com.nakamura.bean.TbItemParamKey">
+			<id column="paramId" property="id"/>
+			<id column="paramName" property="paramName"/>
+		</collection>
+	</resultMap>
+	 id和接口的方法名对应 resultType:返回结果集 要mybatis自动帮你吧查询得到的数据装好 的前提是 mysql中的字段的名称和java中类的属性名称全部一样数据类型一样 
+		他就会自动装好 这个叫做自动装配 
+	<select id="findGroupById" resultMap="group_key">
+		SELECT
+		a.id,
+		a.groupName,
+		a.itemCatId,
+		b.id paramId,
+		b.paramName
+		FROM
+		tbitemparamgroup a
+		INNER JOIN tbitemparamkey b ON a.id = b.groupId
+		WHERE
+		a.id = #{id}
+	</select>
+	-->
+</mapper>
